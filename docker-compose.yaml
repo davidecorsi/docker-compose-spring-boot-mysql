@@ -1,0 +1,27 @@
+#
+# Run this file using
+#
+# $ docker-compose up api
+#
+version: "3.0"
+services:
+  spring-boot-api:
+    build: .
+    volumes:
+      - .:/code
+    working_dir: /code
+    ports: 
+      - 8080:8080
+    command: ["mvn", "spring-boot:run"] 
+    depends_on:
+      - mysql
+  mysql:
+    image: mysql:8
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=db_example
+    volumes:
+      - ./import.sql:/docker-entrypoint-initdb.d/import.sql
+      - ./mysql:/var/lib/mysql
+    ports: 
+      - 3306:3306
